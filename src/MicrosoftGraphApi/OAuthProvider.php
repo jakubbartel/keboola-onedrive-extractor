@@ -90,12 +90,32 @@ class OAuthProvider
 
     /**
      * @param string $accessTokenData
+     * @return mixed[]
+     * @throws Exception\AccessTokenInvalidData
+     */
+    private function initAccessTokenData(string $accessTokenData) : array {
+        $dataArr = json_decode($accessTokenData, true);
+
+        if($dataArr === null || ! is_array($dataArr)) {
+            throw new Exception\AccessTokenInvalidData(
+                sprintf(
+                    'Data json cannot be unmarshalled, sample: "%s"',
+                    is_string($accessTokenData) ? substr($accessTokenData, 0, 16) : gettype($accessTokenData)
+                )
+            );
+        }
+
+        return $dataArr;
+    }
+
+    /**
+     * @param string $accessTokenData
      * @return OAuthProvider
      * @throws InitAccessTokenFailure
      */
     public function initAccessToken(string $accessTokenData) : self
     {
-        $dataArr = json_decode($accessTokenData, true);
+        $dataArr = $this->initAccessTokenData($accessTokenData);
 
         try {
             $this->accessToken = new OAuth2\Client\Token\AccessToken($dataArr);
