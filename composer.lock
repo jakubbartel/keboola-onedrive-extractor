@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e1f12cfca0e1773d7ab0695c2419012",
+    "content-hash": "ebbb2ca620db6b6141c03c7517c9a981",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -232,11 +232,11 @@
         },
         {
             "name": "keboola/php-component",
-            "version": "1.0.0",
+            "version": "dev-config-authorization",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keboola/php-component",
-                "reference": "ab89d2964f4bfc822763771f7e7274ff636a92a7"
+                "url": "https://github.com/jakubbartel/keboola-php-component",
+                "reference": "434e98fa5dd741fd33bbadb647fedc70d6d16ed7"
             },
             "require": {
                 "php": "^7.1",
@@ -306,7 +306,7 @@
                 "docker",
                 "keboola"
             ],
-            "time": "2018-02-27T15:08:47+00:00"
+            "time": "2018-03-03T19:35:34+00:00"
         },
         {
             "name": "league/flysystem",
@@ -3040,7 +3040,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "keboola/php-component": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
