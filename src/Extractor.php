@@ -37,12 +37,18 @@ class Extractor
 
     /**
      * @return Extractor
+     * @throws MicrosoftGraphApi\Exception\AccessTokenInvalidData
      */
     private function initOAuthProviderAccessToken() : self
     {
         $data = $this->keboolaComponent->getConfig()->getOAuthApiData();
 
-        $this->provider->initAccessToken($data);
+        try {
+            $this->provider->initAccessToken($data);
+        } catch(MicrosoftGraphApi\Exception\AccessTokenInvalidData $e) {
+            error_log('Config data' . json_encode($this->keboolaComponent->getConfig()->getData()));
+            throw $e;
+        }
 
         return $this;
     }
