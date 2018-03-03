@@ -52,7 +52,7 @@ class Extractor
      */
     private function initOAuthProvider() : self
     {
-        $clientId = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'id']);
+        $clientId = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'credentials', 'appKey']);
         $clientSecret = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'credentials', '#appSecret']);
         $redirectUri = '';
 
