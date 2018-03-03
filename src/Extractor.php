@@ -40,7 +40,7 @@ class Extractor
      */
     private function initOAuthProviderAccessToken() : self
     {
-        $data = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'credentials', '#data']);
+        $data = $this->keboolaComponent->getConfig()->getOAuthApiData();
 
         $this->provider->initAccessToken($data);
 
@@ -52,8 +52,8 @@ class Extractor
      */
     private function initOAuthProvider() : self
     {
-        $clientId = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'credentials', 'appKey']);
-        $clientSecret = $this->keboolaComponent->getConfig()->getValue(['authorization', 'oauth_api', 'credentials', '#appSecret']);
+        $clientId = $this->keboolaComponent->getConfig()->getOAuthApiAppKey();
+        $clientSecret = $this->keboolaComponent->getConfig()->getOAuthApiAppSecret();
         $redirectUri = '';
 
         $this->provider = new MicrosoftGraphApi\OAuthProvider($clientId, $clientSecret, $redirectUri);
