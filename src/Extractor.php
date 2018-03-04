@@ -47,6 +47,7 @@ class Extractor
             $this->provider->initAccessToken($data);
         } catch(MicrosoftGraphApi\Exception\AccessTokenInvalidData $e) {
             error_log('Config data' . json_encode($this->keboolaComponent->getConfig()->getData()));
+            error_log('Config file' . file_get_contents('/data/config.json'));
             throw $e;
         }
 
