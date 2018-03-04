@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Keboola\\OneDriveExtractor\\": "src/"
+            "Keboola\\OneDriveExtractor\\": "src/Keboola/OneDriveExtractor"
         }
     },
     "repositories": [
