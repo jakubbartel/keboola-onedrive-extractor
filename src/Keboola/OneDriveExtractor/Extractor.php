@@ -2,14 +2,13 @@
 
 namespace Keboola\OneDriveExtractor;
 
-use Keboola\Component\BaseComponent;
 use League\Flysystem;
 
 class Extractor
 {
 
     /**
-     * @var BaseComponent
+     * @var Component
      */
     private $keboolaComponent;
 
@@ -28,7 +27,7 @@ class Extractor
      */
     public function __construct()
     {
-        $this->keboolaComponent = new BaseComponent();
+        $this->keboolaComponent = new Component();
 
         $this->initOAuthProvider();
         $this->initOAuthProviderAccessToken();
@@ -80,8 +79,6 @@ class Extractor
 
         $file = $files->readFile($id, MicrosoftGraphApi\Files::ONEDRIVE_FILE_TYPE_EXCEL);
 
-        //echo 'File of length ' . strlen($file->getContents()) . ' downloaded' . "\n";
-
         return $file;
     }
 
@@ -106,12 +103,10 @@ class Extractor
      */
     public function run() : void
     {
-        $filesConfig = $this->keboolaComponent->getConfig()->getValue(['parameters' ,'oneDriveFiles']);
+        $fileParameters = $this->keboolaComponent->getConfig()->getParameters();
 
-        foreach($filesConfig as $fileConfig) {
-            $file = $this->extractFile($fileConfig['id']);
-            $this->writeFileToOutput($file, $fileConfig['output']);
-        }
+        $file = $this->extractFile($fileParameters['id']);
+        $this->writeFileToOutput($file, $fileParameters['output']);
     }
 
 }
