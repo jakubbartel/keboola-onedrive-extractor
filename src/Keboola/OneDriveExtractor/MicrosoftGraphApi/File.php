@@ -2,6 +2,7 @@
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
+use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\StreamInterface;
 
@@ -35,6 +36,7 @@ class File
      */
     public function getContents() : string
     {
+        $this->stream->rewind();
         return $this->stream->getContents();
     }
 
@@ -48,7 +50,7 @@ class File
         //$resource = StreamWrapper::getResource($this->stream);
         //$fileSystem->putStream($path, $resource);
 
-        $fileSystem->put($path, $this->stream->getContents());
+        $fileSystem->put($path, $this->getContents());
 
         return $this;
     }
