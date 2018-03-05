@@ -1,20 +1,23 @@
 <?php
 
-use Keboola\Component\Config\BaseConfig;
+namespace Keboola\OneDriveExtractor\Tests\Config;
+
+use Keboola\Component;
+use Keboola\OneDriveExtractor;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-class BaseConfigTest extends TestCase
+class ConfigDefinitionTest extends TestCase
 {
 
     public function testLoadValidConfig() : void
     {
-        $config = new Keboola\Component\Config\BaseConfig(
+        $config = new Component\Config\BaseConfig(
             json_decode(file_get_contents(__DIR__ . '/fixtures/config_valid.json'), true),
-            new \Keboola\OneDriveExtractor\ConfigDefinition()
+            new OneDriveExtractor\ConfigDefinition()
         );
 
-        $this->assertInstanceOf(BaseConfig::class, $config);
+        $this->assertInstanceOf(Component\Config\BaseConfig::class, $config);
 
         $this->assertEquals('__id', $config->getValue(['parameters', 'id']));
         $this->assertEquals('__output', $config->getValue(['parameters', 'output']));
@@ -24,9 +27,9 @@ class BaseConfigTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new Keboola\Component\Config\BaseConfig(
+        new Component\Config\BaseConfig(
             json_decode(file_get_contents(__DIR__ . '/fixtures/config_missing_id.json'), true),
-            new \Keboola\OneDriveExtractor\ConfigDefinition()
+            new OneDriveExtractor\ConfigDefinition()
         );
     }
 
@@ -34,9 +37,9 @@ class BaseConfigTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new Keboola\Component\Config\BaseConfig(
+        new Component\Config\BaseConfig(
             json_decode(file_get_contents(__DIR__ . '/fixtures/config_missing_id.json'), true),
-            new \Keboola\OneDriveExtractor\ConfigDefinition()
+            new OneDriveExtractor\ConfigDefinition()
         );
     }
 }

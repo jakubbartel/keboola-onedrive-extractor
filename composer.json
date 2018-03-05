@@ -12,6 +12,11 @@
             "Keboola\\OneDriveExtractor\\": "src/Keboola/OneDriveExtractor"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Keboola\\OneDriveExtractor\\Tests\\": "tests/"
+        }
+    },
     "repositories": [
         {
             "type": "git",
@@ -41,7 +46,6 @@
         "phplint": "parallel-lint -j 10 --exclude vendor .",
         "build": [
             "@phplint",
-            "@phpcs",
             "@phpstan",
             "@tests"
         ]

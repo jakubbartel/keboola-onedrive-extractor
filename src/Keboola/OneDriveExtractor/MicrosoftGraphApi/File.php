@@ -2,7 +2,7 @@
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
-use GuzzleHttp\Psr7\StreamWrapper;
+//use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\StreamInterface;
 

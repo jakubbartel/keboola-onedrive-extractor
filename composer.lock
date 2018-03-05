@@ -236,7 +236,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jakubbartel/keboola-php-component",
-                "reference": "434e98fa5dd741fd33bbadb647fedc70d6d16ed7"
+                "reference": "da849f45534ef94a812a7541d1f62c6ab7030615"
             },
             "require": {
                 "php": "^7.1",
@@ -306,7 +306,7 @@
                 "docker",
                 "keboola"
             ],
-            "time": "2018-03-03T19:35:34+00:00"
+            "time": "2018-03-04T23:37:38+00:00"
         },
         {
             "name": "league/flysystem",

@@ -1,5 +1,8 @@
 <?php
 
+namespace Keboola\OneDriveExtractor\Tests\MicrosoftGraphApi;
+
+use GuzzleHttp;
 use Keboola\OneDriveExtractor\MicrosoftGraphApi\File;
 use PHPUnit\Framework\TestCase;
 

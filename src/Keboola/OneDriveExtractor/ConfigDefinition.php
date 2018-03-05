@@ -25,7 +25,8 @@ class ConfigDefinition extends BaseConfigDefinition
                 ->end()
                 ->scalarNode('output')
                     ->isRequired()
-                ->end();
+                ->end()
+            ->end();
 
         return $parametersNode;
     }
