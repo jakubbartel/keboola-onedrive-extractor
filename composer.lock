@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecb629a2aeec163d90f051b1500c27a1",
+    "content-hash": "e010bf0175169335573e2c448494bbcf",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -232,11 +232,11 @@
         },
         {
             "name": "keboola/php-component",
-            "version": "dev-config-authorization",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jakubbartel/keboola-php-component",
-                "reference": "da849f45534ef94a812a7541d1f62c6ab7030615"
+                "reference": "5a50f85609f8e845a212d63cc8af20fcb8b72a72"
             },
             "require": {
                 "php": "^7.1",
@@ -250,7 +250,7 @@
                 "jakub-onderka/php-parallel-lint": "^0.9",
                 "phpstan/phpstan-shim": "^0.9.1",
                 "phpunit/phpunit": "^6.5",
-                "slevomat/coding-standard": "^4.0",
+                "slevomat/coding-standard": "4.4.6",
                 "squizlabs/php_codesniffer": "^3.2"
             },
             "type": "project",
@@ -306,7 +306,7 @@
                 "docker",
                 "keboola"
             ],
-            "time": "2018-03-04T23:37:38+00:00"
+            "time": "2018-03-05T11:57:02+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1119,16 +1119,16 @@
         },
         {
             "name": "psr/simple-cache",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/simple-cache.git",
-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
             "require": {
@@ -1163,7 +1163,7 @@
                 "psr-16",
                 "simple-cache"
             ],
-            "time": "2017-01-02T13:31:39+00:00"
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "symfony/config",
