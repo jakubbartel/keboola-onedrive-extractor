@@ -71,13 +71,22 @@ class Extractor
     }
 
     /**
-     * @param string $id
+     * @param string $id input id - can be url to OneDrive file or OneDrive Item Id
+     * @param string $output
      * @return MicrosoftGraphApi\File
      */
-    private function extractFile(string $id) : MicrosoftGraphApi\File {
+    private function extractFile(string $id, string $output) : MicrosoftGraphApi\File
+    {
         $files = new MicrosoftGraphApi\Files($this->api);
 
-        $file = $files->readFile($id, MicrosoftGraphApi\Files::ONEDRIVE_FILE_TYPE_EXCEL);
+        $id = $files->parseOneDriveItemId($id);
+
+        $fileMetadata = $files->readFileMetadata($id);
+        $file = $files->readFile($id);
+
+        $outputName = $output === "" ? $fileMetadata->getOneDriveName() : $output;
+
+        $this->writeFileToOutput($file, $outputName);
 
         return $file;
     }
@@ -87,7 +96,8 @@ class Extractor
      * @param string $output
      * @return Extractor
      */
-    private function writeFileToOutput(MicrosoftGraphApi\File $file, string $output) : self {
+    private function writeFileToOutput(MicrosoftGraphApi\File $file, string $output) : self
+    {
         $outputFilesDir = sprintf('%s%s', $this->keboolaComponent->getDataDir(), '/out/files');
 
         $adapter = new Flysystem\Adapter\Local($outputFilesDir);
@@ -105,8 +115,7 @@ class Extractor
     {
         $fileParameters = $this->keboolaComponent->getConfig()->getParameters();
 
-        $file = $this->extractFile($fileParameters['id']);
-        $this->writeFileToOutput($file, $fileParameters['output']);
+        $this->extractFile($fileParameters['id'], $fileParameters['output']);
     }
 
 }

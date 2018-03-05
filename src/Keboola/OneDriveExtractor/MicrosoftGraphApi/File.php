@@ -36,7 +36,10 @@ class File
      */
     public function getContents() : string
     {
-        $this->stream->rewind();
+        if($this->stream->isSeekable()) {
+            $this->stream->rewind();
+        }
+
         return $this->stream->getContents();
     }
 
