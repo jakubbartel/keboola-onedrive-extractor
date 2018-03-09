@@ -19,8 +19,7 @@ class ConfigDefinitionTest extends TestCase
 
         $this->assertInstanceOf(Component\Config\BaseConfig::class, $config);
 
-        $this->assertEquals('__id', $config->getValue(['parameters', 'id']));
-        $this->assertEquals('__output', $config->getValue(['parameters', 'output']));
+        $this->assertEquals('_id_', $config->getValue(['parameters', 'id']));
     }
 
     public function testLoadConfigWithMissingId() : void

@@ -23,9 +23,6 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('output')
-                    ->isRequired()
-                ->end()
             ->end();
 
         return $parametersNode;

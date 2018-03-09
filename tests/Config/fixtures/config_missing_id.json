@@ -1,7 +1,5 @@
 {
-    "parameters": {
-        "output": "__output"
-    },
+    "parameters": {},
     "authorization": {
         "oauth_api": {
             "credentials": {

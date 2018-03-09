@@ -8,11 +8,6 @@ class Extractor
 {
 
     /**
-     * @var Component
-     */
-    private $keboolaComponent;
-
-    /**
      * @var MicrosoftGraphApi\OAuthProvider
      */
     private $provider;
@@ -23,39 +18,53 @@ class Extractor
     private $api;
 
     /**
-     * Extractor constructor.
+     * @var Flysystem\Filesystem
      */
-    public function __construct()
-    {
-        $this->keboolaComponent = new Component();
+    private $filesystem;
 
-        $this->initOAuthProvider();
-        $this->initOAuthProviderAccessToken();
+    /**
+     * Extractor constructor.
+     *
+     * @param string $oAuthAppId
+     * @param string $oAuthAppSecret
+     * @param string $oAuthData serialized data returned by oAuth API
+     * @param Flysystem\Filesystem $filesystem
+     */
+    public function __construct(
+        string $oAuthAppId,
+        string $oAuthAppSecret,
+        string $oAuthData,
+        Flysystem\Filesystem $filesystem
+    )
+    {
+        $this->filesystem = $filesystem;
+
+        $this->initOAuthProvider($oAuthAppId, $oAuthAppSecret);
+        $this->initOAuthProviderAccessToken($oAuthData);
         $this->initApi();
     }
 
     /**
+     * @param string $oAuthData
      * @return Extractor
      */
-    private function initOAuthProviderAccessToken() : self
+    private function initOAuthProviderAccessToken(string $oAuthData) : self
     {
-        $data = $this->keboolaComponent->getConfig()->getOAuthApiData();
-
-        $this->provider->initAccessToken($data);
+        $this->provider->initAccessToken($oAuthData);
 
         return $this;
     }
 
     /**
+     * @param string $oAuthAppId
+     * @param string $oAuthAppSecret
      * @return Extractor
      */
-    private function initOAuthProvider() : self
+    private function initOAuthProvider(string $oAuthAppId, string $oAuthAppSecret) : self
     {
-        $clientId = $this->keboolaComponent->getConfig()->getOAuthApiAppKey();
-        $clientSecret = $this->keboolaComponent->getConfig()->getOAuthApiAppSecret();
         $redirectUri = '';
 
-        $this->provider = new MicrosoftGraphApi\OAuthProvider($clientId, $clientSecret, $redirectUri);
+        $this->provider = new MicrosoftGraphApi\OAuthProvider($oAuthAppId, $oAuthAppSecret, $redirectUri);
 
         return $this;
     }
@@ -71,11 +80,22 @@ class Extractor
     }
 
     /**
+     * @param MicrosoftGraphApi\File $file
+     * @param string $filePathname
+     * @return Extractor
+     */
+    private function writeFileToOutput(MicrosoftGraphApi\File $file, string $filePathname) : self
+    {
+        $file->saveToFile($this->filesystem, $filePathname);
+
+        return $this;
+    }
+
+    /**
      * @param string $id input id - can be url to OneDrive file or OneDrive Item Id
-     * @param string $output
      * @return MicrosoftGraphApi\File
      */
-    private function extractFile(string $id, string $output) : MicrosoftGraphApi\File
+    public function extractFile(string $id) : MicrosoftGraphApi\File
     {
         $files = new MicrosoftGraphApi\Files($this->api);
 
@@ -84,38 +104,9 @@ class Extractor
         $fileMetadata = $files->readFileMetadata($id);
         $file = $files->readFile($id);
 
-        $outputName = $output === "" ? $fileMetadata->getOneDriveName() : $output;
-
-        $this->writeFileToOutput($file, $outputName);
+        $this->writeFileToOutput($file, $fileMetadata->getOneDriveName());
 
         return $file;
-    }
-
-    /**
-     * @param MicrosoftGraphApi\File $file
-     * @param string $output
-     * @return Extractor
-     */
-    private function writeFileToOutput(MicrosoftGraphApi\File $file, string $output) : self
-    {
-        $outputFilesDir = sprintf('%s%s', $this->keboolaComponent->getDataDir(), '/out/files');
-
-        $adapter = new Flysystem\Adapter\Local($outputFilesDir);
-        $fileSystem = new Flysystem\Filesystem($adapter);
-
-        $file->saveToFile($fileSystem, $output);
-
-        return $this;
-    }
-
-    /**
-     *
-     */
-    public function run() : void
-    {
-        $fileParameters = $this->keboolaComponent->getConfig()->getParameters();
-
-        $this->extractFile($fileParameters['id'], $fileParameters['output']);
     }
 
 }

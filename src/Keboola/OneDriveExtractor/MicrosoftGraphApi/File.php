@@ -45,15 +45,16 @@ class File
 
     /**
      * @param Filesystem $fileSystem
-     * @param string $path
+     * @param string $filePathname
      * @return File
      */
-    public function saveToFile(Filesystem $fileSystem, string $path) : self {
+    public function saveToFile(Filesystem $fileSystem, string $filePathname) : self
+    {
         // stream version is preferred but not functional
         //$resource = StreamWrapper::getResource($this->stream);
         //$fileSystem->putStream($path, $resource);
 
-        $fileSystem->put($path, $this->getContents());
+        $fileSystem->put($filePathname, $this->getContents());
 
         return $this;
     }

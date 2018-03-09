@@ -1,7 +1,6 @@
 {
     "parameters": {
-        "id": "__id",
-        "output": "__output"
+        "id": "_id_"
     },
     "authorization": {
         "oauth_api": {
