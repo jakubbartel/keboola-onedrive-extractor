@@ -1,5 +1,7 @@
 # Keboola OneDrive Extractor
 
+[![Build Status](https://travis-ci.org/jakubbartel/keboola-onedrive-extractor.svg?branch=master)](https://travis-ci.org/jakubbartel/keboola-onedrive-extractor)
+
 Extracts data from OneDrive
 
 ## Microsoft Graph API Application
