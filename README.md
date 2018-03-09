@@ -8,7 +8,7 @@ Extracts data from OneDrive
 2. Click "Add an app" button, fill in name of the new Application. Application id will be generated
 3. To add *redirect urls* go to section Platforms / Add Platform / Web : fill in *Redirect URLs* and check *Allow implicit flow*
 4. Generate application secret in section *Application secrets* button "Generate New Password" (save the secret)
-5. Add permissions that oAuth can ask for: `Files.Read`, `Files.Read.All`, `Files.Read.Selected`, `Files.ReadWrite`, `Files.ReadWrite.All`, `Files.ReadWrite.Selected`
+5. Add Delegated permissions that oAuth can ask for: `Files.Read`, `Files.Read.All`, `Files.Read.Selected`, `Files.ReadWrite`, `Files.ReadWrite.All`, `Files.ReadWrite.Selected`
 6. Fill other fields at your will
 7. Hit "Save"
 
