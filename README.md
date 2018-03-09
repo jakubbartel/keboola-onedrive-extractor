@@ -18,3 +18,15 @@ Use *Application Id*, *Secret* and *redict url* for OAuth with following links:
 
 - oauth url: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?state=__state__&scope=offline_access%20Files.Read&response_type=code&approval_prompt=auto&redirect_uri=__redirect_uri__&client_id=__client_id__`
 - token url: `https://login.microsoftonline.com/common/oauth2/v2.0/token`
+
+## OAuth testing
+
+Directory `/oauth` contains docker-compose file to run local OAuth testing environment - printing all OAuth data
+returned from the server in browser.
+
+1. `cd oauth`
+2. `cp .env.example .env` open `.env` and fill all variables
+3. `docker-compose up`
+4. add redirect url `https://localhost:10200` to Microsoft Graph API Application settings
+5. open web browser `https://localhost:10200` which should be redirected to Microsoft Login or print acquired access token
+6. use `https://localhost:10200?refresh` to manually refresh actual access token
