@@ -95,7 +95,7 @@ class OAuthProvider
      * @return mixed[]
      * @throws Exception\AccessTokenInvalidData
      */
-    private function initAccessTokenData(string $accessTokenData) : array
+    private function parseAccessTokenData(string $accessTokenData) : array
     {
         $dataArr = json_decode($accessTokenData, true);
 
@@ -118,7 +118,7 @@ class OAuthProvider
      */
     public function initAccessToken(string $accessTokenData) : self
     {
-        $dataArr = $this->initAccessTokenData($accessTokenData);
+        $dataArr = $this->parseAccessTokenData($accessTokenData);
 
         try {
             $this->accessToken = new OAuth2\Client\Token\AccessToken($dataArr);
