@@ -55,6 +55,7 @@ class OneDrive
             );
         }
 
+        /** @var mixed $stream */
         $stream = $fileContentResponse->getRawBody();
 
         if( ! $stream instanceof GuzzleHttp\Psr7\Stream) {
