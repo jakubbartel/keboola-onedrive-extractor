@@ -21,7 +21,7 @@ docker push ${REPOSITORY}:${TRAVIS_TAG}
 docker push ${REPOSITORY}:latest
 
 # Update the tag in Keboola Developer Portal -> Deploy to KBC
-if echo ${TRAVIS_TAG} | grep -c '^v\?[0-9]\+\.[0-9]\+\.[0-9]\+-dev$'
+if echo ${TRAVIS_TAG} | grep -c '^v\?[0-9]\+\.[0-9]\+\.[0-9]\+-dump$'
 then
     docker run --rm \
         -e KBC_DEVELOPERPORTAL_USERNAME \

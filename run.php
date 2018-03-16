@@ -13,7 +13,7 @@ try {
     error_log('Trace: ' . $e->getTraceAsString());
 
     error_log($component->getConfig()->getAuthorization());
-    
+
     exit(1);
 }
 
