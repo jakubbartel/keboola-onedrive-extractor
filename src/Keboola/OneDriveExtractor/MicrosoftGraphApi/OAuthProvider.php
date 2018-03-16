@@ -182,7 +182,9 @@ class OAuthProvider
      */
     private function getRawAccessToken() : OAuth2\Client\Token\AccessToken
     {
-        if($this->accessToken->hasExpired()) {
+        // always refresh the access token, because "expires_in" is e.g. 3600 (secs) so expiration
+        // is always +1 hour from now
+        if(true || $this->accessToken->hasExpired()) {
             $this->refreshAccessToken();
         }
 
