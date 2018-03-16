@@ -30,6 +30,7 @@ class Api
     public function getApi(): Graph
     {
         $api = new Graph();
+
         return $api->setAccessToken($this->provider->getAccessToken());
     }
 

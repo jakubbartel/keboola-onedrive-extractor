@@ -35,8 +35,7 @@ class Extractor
         string $oAuthAppSecret,
         string $oAuthData,
         Flysystem\Filesystem $filesystem
-    )
-    {
+    ) {
         $this->filesystem = $filesystem;
 
         $this->initOAuthProvider($oAuthAppId, $oAuthAppSecret);
@@ -92,17 +91,15 @@ class Extractor
     }
 
     /**
-     * @param string $id input id - can be url to OneDrive file or OneDrive Item Id
+     * @param string $link url to File on OneDrive or SharePoint
      * @return MicrosoftGraphApi\File
      */
-    public function extractFile(string $id) : MicrosoftGraphApi\File
+    public function extractFile(string $link) : MicrosoftGraphApi\File
     {
-        $files = new MicrosoftGraphApi\Files($this->api);
+        $files = new MicrosoftGraphApi\OneDrive($this->api);
 
-        $id = $files->parseOneDriveItemId($id);
-
-        $fileMetadata = $files->readFileMetadata($id);
-        $file = $files->readFile($id);
+        $fileMetadata = $files->readFileMetadataByLink($link);
+        $file = $files->readFile($fileMetadata->getOneDriveId());
 
         $this->writeFileToOutput($file, $fileMetadata->getOneDriveName());
 

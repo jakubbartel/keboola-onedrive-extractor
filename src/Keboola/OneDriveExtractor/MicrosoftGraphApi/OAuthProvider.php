@@ -68,6 +68,8 @@ class OAuthProvider
             'scopes' => implode(' ', [
                 self::SCOPE_OFFLINE_ACCESS,
                 self::SCOPE_FILES_READ,
+                //'Files.ReadWrite',
+                //'Files.ReadWrite.All',
             ]),
         ]);
     }
@@ -93,7 +95,8 @@ class OAuthProvider
      * @return mixed[]
      * @throws Exception\AccessTokenInvalidData
      */
-    private function initAccessTokenData(string $accessTokenData) : array {
+    private function initAccessTokenData(string $accessTokenData) : array
+    {
         $dataArr = json_decode($accessTokenData, true);
 
         if($dataArr === null || ! is_array($dataArr)) {
