@@ -4,6 +4,7 @@ namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
 use GuzzleHttp;
 use Microsoft\Graph\Exception\GraphException;
+use Microsoft\Graph\Http\GraphResponse;
 
 class OneDrive
 {
@@ -43,10 +44,10 @@ class OneDrive
     public function readFile(string $oneDriveItemId) : File
     {
         try {
-            /** @var GuzzleHttp\Psr7\Stream $response */
+            /** @var GraphResponse $fileContentResponse */
             $fileContentResponse = $this->api->getApi()
                 ->createRequest('GET', sprintf('/me/drive/items/%s/content', $oneDriveItemId))
-                ->setReturnType(GuzzleHttp\Psr7\Stream::class)
+                //->setReturnType(GuzzleHttp\Psr7\Stream::class)
                 ->execute();
         } catch(GraphException | GuzzleHttp\Exception\ClientException $e) {
             throw new Exception\FileCannotBeLoaded(
@@ -54,7 +55,15 @@ class OneDrive
             );
         }
 
-        return File::initByStream($fileContentResponse);
+        $stream = $fileContentResponse->getRawBody();
+
+        if( ! $stream instanceof GuzzleHttp\Psr7\Stream) {
+            throw new Exception\FileCannotBeLoaded(
+                sprintf('File with id "%s" cannot not be loaded from OneDrive, no stream in body', $oneDriveItemId)
+            );
+        }
+
+        return File::initByStream($stream);
     }
 
 }
