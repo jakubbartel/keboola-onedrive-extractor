@@ -12,7 +12,7 @@ try {
     error_log('Code: ' . $e->getCode());
     error_log('Trace: ' . $e->getTraceAsString());
 
-    error_log($component->getConfig()->getAuthorization());
+    error_log(json_encode($component->getConfig()->getAuthorization()));
 
     exit(1);
 }
