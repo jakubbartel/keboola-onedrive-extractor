@@ -93,13 +93,18 @@ class Extractor
     /**
      * @param string $link url to File on OneDrive or SharePoint
      * @return MicrosoftGraphApi\File
+     * @throws Exception\UserException
      */
     public function extractFile(string $link) : MicrosoftGraphApi\File
     {
         $files = new MicrosoftGraphApi\OneDrive($this->api);
 
-        $fileMetadata = $files->readFileMetadataByLink($link);
-        $file = $files->readFile($fileMetadata->getOneDriveId());
+        try {
+            $fileMetadata = $files->readFileMetadataByLink($link);
+            $file = $files->readFile($fileMetadata->getOneDriveId());
+        } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded $e) {
+            throw new Exception\UserException($e->getMessage());
+        }
 
         $this->writeFileToOutput($file, $fileMetadata->getOneDriveName());
 
