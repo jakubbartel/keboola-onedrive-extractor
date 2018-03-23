@@ -58,7 +58,7 @@ class Shares
                 ->execute();
         } catch(GraphException | GuzzleHttp\Exception\ClientException $e) {
             throw new Exception\InvalidSharingUrl(
-                sprintf('Given url "%s" cannot be loaded ad OneDrive object', $link)
+                sprintf('Given url "%s" cannot be loaded as OneDrive object', $link)
             );
         }
 
