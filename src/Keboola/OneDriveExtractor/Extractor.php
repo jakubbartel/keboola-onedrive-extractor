@@ -102,7 +102,7 @@ class Extractor
         try {
             $fileMetadata = $files->readFileMetadataByLink($link);
             $file = $files->readFile($fileMetadata->getOneDriveId());
-        } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded $e) {
+        } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded | MicrosoftGraphApi\Exception\InvalidSharingUrl $e) {
             throw new Exception\UserException($e->getMessage());
         }
 
