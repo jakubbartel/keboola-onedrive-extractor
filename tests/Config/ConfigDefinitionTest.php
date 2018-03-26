@@ -31,14 +31,4 @@ class ConfigDefinitionTest extends TestCase
             new OneDriveExtractor\ConfigDefinition()
         );
     }
-
-    public function testLoadConfigWithMissingOutput() : void
-    {
-        $this->expectException(InvalidConfigurationException::class);
-
-        new Component\Config\BaseConfig(
-            json_decode(file_get_contents(__DIR__ . '/fixtures/config_missing_id.json'), true),
-            new OneDriveExtractor\ConfigDefinition()
-        );
-    }
 }

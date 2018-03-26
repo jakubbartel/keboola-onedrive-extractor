@@ -1,21 +1,5 @@
 {
     "parameters": {
         "id": "_id_"
-    },
-    "authorization": {
-        "oauth_api": {
-            "credentials": {
-                "#data": "",
-                "appKey": "",
-                "#appSecret": ""
-            },
-            "version": 2
-        }
-    },
-    "processors": {
-        "before": [],
-        "after": []
-    },
-    "image_parameters": [],
-    "action": "run"
+    }
 }
