@@ -32,3 +32,17 @@ returned from the server in browser.
 4. add redirect url `https://localhost:10200` to Microsoft Graph API Application settings
 5. open web browser `https://localhost:10200` which should be redirected to Microsoft Login or print acquired access token
 6. use `https://localhost:10200?refresh` to manually refresh actual access token
+
+## Microsoft Graph API
+
+Component uses Microsoft Graph API to connect to authenticated user's OneDrive. It downloads documents in three steps.
+
+1. Create sharing link -- <https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/shares_get> Transform a link
+from component configuration into a *sharing link* which is something that can translate valid OneDrive/SharePoint document links
+into unified format which then enables getting *OneDrive Item Id*. The reason for using sharing link is that Microsoft has multiple
+services that allows to work with documents and getting *OneDrive Item Id* from each service manually would not be sustainable.
+2. From sharing link the *OneDrive Item* can be obtained easily by using *shares* endpoint <https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/shares_get#access-the-shared-item-directly>
+3. Download content of the document using *oneDrive Item id* <https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_get_content>
+
+Sometime the *sharing url* cannot be obtained for documents that are shared to authenticated account. User should always be the owner
+of the downloaded document.
