@@ -47,12 +47,14 @@ class OneDrive
         try {
             $response = $client->get($oneDriveItemMetadata->getDownloadUrl());
         } catch(RequestException $e) {
-            if($e->hasResponse()) {
+            $response = $e->getResponse();
+
+            if($response !== null) {
                 throw new Exception\FileCannotBeLoaded(
                     sprintf(
                         'File with id "%s" cannot not be downloaded from OneDrive, returned status code %d on download url',
                         $oneDriveItemMetadata->getOneDriveId(),
-                        $e->getResponse()->getStatusCode()
+                        $response->getStatusCode()
                     )
                 );
             } else {
