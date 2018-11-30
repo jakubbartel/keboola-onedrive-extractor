@@ -94,6 +94,7 @@ class Extractor
      * @param string $link url to File on OneDrive or SharePoint
      * @return MicrosoftGraphApi\File
      * @throws Exception\UserException
+     * @throws MicrosoftGraphApi\Exception\MissingDownloadUrl
      */
     public function extractFile(string $link) : MicrosoftGraphApi\File
     {

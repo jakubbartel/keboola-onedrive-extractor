@@ -27,6 +27,7 @@ class OneDrive
      * @param string $link
      * @return FileMetadata
      * @throws Exception\InvalidSharingUrl
+     * @throws Exception\MissingDownloadUrl
      */
     public function readFileMetadataByLink(string $link) : FileMetadata
     {

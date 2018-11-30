@@ -43,6 +43,7 @@ class Shares
      * @param string $link
      * @return FileMetadata
      * @throws Exception\InvalidSharingUrl
+     * @throws Exception\MissingDownloadUrl
      */
     public function getSharesDriveItemMetadata(string $link)
     {
