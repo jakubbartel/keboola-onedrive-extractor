@@ -2,9 +2,8 @@
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
-use GuzzleHttp;
-use Microsoft\Graph\Exception\GraphException;
-use Microsoft\Graph\Http\GraphResponse;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class OneDrive
 {
@@ -27,7 +26,8 @@ class OneDrive
     /**
      * @param string $link
      * @return FileMetadata
-     * @throws Exception\FileCannotBeLoaded
+     * @throws Exception\InvalidSharingUrl
+     * @throws Exception\MissingDownloadUrl
      */
     public function readFileMetadataByLink(string $link) : FileMetadata
     {
@@ -37,34 +37,49 @@ class OneDrive
     }
 
     /**
-     * @param string $oneDriveItemId
+     * @param FileMetadata $oneDriveItemMetadata
      * @return File
      * @throws Exception\FileCannotBeLoaded
      */
-    public function readFile(string $oneDriveItemId) : File
+    public function readFile(FileMetadata $oneDriveItemMetadata) : File
     {
+        $client = new Client();
+
         try {
-            /** @var GraphResponse $fileContentResponse */
-            $fileContentResponse = $this->api->getApi()
-                ->createRequest('GET', sprintf('/me/drive/items/%s/content', $oneDriveItemId))
-                //->setReturnType(GuzzleHttp\Psr7\Stream::class)
-                ->execute();
-        } catch(GraphException | GuzzleHttp\Exception\ClientException $e) {
+            $response = $client->get($oneDriveItemMetadata->getDownloadUrl());
+        } catch(RequestException $e) {
+            $response = $e->getResponse();
+
+            if($response !== null) {
+                throw new Exception\FileCannotBeLoaded(
+                    sprintf(
+                        'File with id "%s" cannot not be downloaded from OneDrive, returned status code %d on download url',
+                        $oneDriveItemMetadata->getOneDriveId(),
+                        $response->getStatusCode()
+                    )
+                );
+            } else {
+                throw new Exception\FileCannotBeLoaded(
+                    sprintf(
+                        'File with id "%s" cannot not be downloaded from OneDrive, error when performing GET request %s',
+                        $oneDriveItemMetadata->getOneDriveId(),
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        if($response->getStatusCode() !== 200) {
             throw new Exception\FileCannotBeLoaded(
-                sprintf('File with id "%s" cannot not be loaded from OneDrive', $oneDriveItemId)
+                sprintf(
+                    'File with id "%s" cannot not be downloaded from OneDrive, returned status code %d on download url',
+                    $oneDriveItemMetadata->getOneDriveId(),
+                    $response->getStatusCode()
+                )
             );
         }
 
-        /** @var mixed $stream */
-        $stream = $fileContentResponse->getRawBody();
-
-        if( ! $stream instanceof GuzzleHttp\Psr7\Stream) {
-            throw new Exception\FileCannotBeLoaded(
-                sprintf('File with id "%s" cannot not be loaded from OneDrive, no stream in body', $oneDriveItemId)
-            );
-        }
-
-        return File::initByStream($stream);
+        return File::initByStream($response->getBody());
     }
 
 }

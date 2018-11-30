@@ -37,12 +37,17 @@ class OAuthProvider
     private const SCOPE_FILES_READ = 'Files.Read';
 
     /**
+     * @const string
+     */
+    private const SCOPE_SITES_READ_ALL = 'Sites.Read.All';
+
+    /**
      * @var OAuth2\Client\Provider\GenericProvider
      */
     private $provider;
 
     /**
-     * @var OAuth2\Client\Token\AccessToken
+     * @var OAuth2\Client\Token\AccessTokenInterface
      */
     private $accessToken;
 
@@ -68,6 +73,7 @@ class OAuthProvider
             'scopes' => implode(' ', [
                 self::SCOPE_OFFLINE_ACCESS,
                 self::SCOPE_FILES_READ,
+                self::SCOPE_SITES_READ_ALL,
                 //'Files.ReadWrite',
                 //'Files.ReadWrite.All',
             ]),
@@ -178,9 +184,11 @@ class OAuthProvider
     }
 
     /**
-     * @return OAuth2\Client\Token\AccessToken
+     * @return OAuth2\Client\Token\AccessTokenInterface
+     * @throws Exception\AccessTokenNotInitialized
+     * @throws GenerateAccessTokenFailure
      */
-    private function getRawAccessToken() : OAuth2\Client\Token\AccessToken
+    private function getRawAccessToken() : OAuth2\Client\Token\AccessTokenInterface
     {
         // always refresh the access token, because "expires_in" is e.g. 3600 (secs) so expiration
         // is always +1 hour from now

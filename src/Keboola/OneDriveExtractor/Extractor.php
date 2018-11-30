@@ -94,6 +94,7 @@ class Extractor
      * @param string $link url to File on OneDrive or SharePoint
      * @return MicrosoftGraphApi\File
      * @throws Exception\UserException
+     * @throws MicrosoftGraphApi\Exception\MissingDownloadUrl
      */
     public function extractFile(string $link) : MicrosoftGraphApi\File
     {
@@ -101,7 +102,7 @@ class Extractor
 
         try {
             $fileMetadata = $files->readFileMetadataByLink($link);
-            $file = $files->readFile($fileMetadata->getOneDriveId());
+            $file = $files->readFile($fileMetadata);
         } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded | MicrosoftGraphApi\Exception\InvalidSharingUrl $e) {
             throw new Exception\UserException($e->getMessage());
         }

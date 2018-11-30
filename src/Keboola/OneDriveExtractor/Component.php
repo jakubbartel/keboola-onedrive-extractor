@@ -33,7 +33,9 @@ class Component extends BaseComponent
     }
 
     /**
-     *
+     * @throws MicrosoftGraphApi\Exception\MissingDownloadUrl intentionally treat this as application
+     *         exception so this error is alerted to developer
+     * @throws Exception\UserException
      */
     public function run() : void
     {

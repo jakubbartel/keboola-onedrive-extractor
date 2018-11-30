@@ -2,6 +2,7 @@
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
+use Keboola\OneDriveExtractor\MicrosoftGraphApi\Exception\MissingDownloadUrl;
 use Microsoft\Graph\Model;
 
 class FileMetadata
@@ -18,26 +19,41 @@ class FileMetadata
     private $oneDriveName;
 
     /**
+     * @var string
+     */
+    private $downloadUrl;
+
+    /**
      * FileMetadata constructor.
      *
      * @param string $oneDriveId
      * @param string $oneDriveName
+     * @param string $downloadUrl
      */
-    private function __construct($oneDriveId, $oneDriveName)
+    private function __construct($oneDriveId, $oneDriveName, $downloadUrl)
     {
         $this->oneDriveId = $oneDriveId;
         $this->oneDriveName = $oneDriveName;
+        $this->downloadUrl = $downloadUrl;
     }
 
     /**
      * @param Model\DriveItem $oneDriveItem
      * @return FileMetadata
+     * @throws MissingDownloadUrl
      */
     public static function initByOneDriveModel(Model\DriveItem $oneDriveItem): self
     {
+        $properties = $oneDriveItem->getProperties();
+
+        if( ! isset($properties['@microsoft.graph.downloadUrl'])) {
+            throw new MissingDownloadUrl();
+        }
+
         return new FileMetadata(
             $oneDriveItem->getId(),
-            $oneDriveItem->getName()
+            $oneDriveItem->getName(),
+            $properties['@microsoft.graph.downloadUrl']
         );
     }
 
@@ -55,6 +71,14 @@ class FileMetadata
     public function getOneDriveName() : string
     {
         return $this->oneDriveName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDownloadUrl() : string
+    {
+        return $this->downloadUrl;
     }
 
 }
