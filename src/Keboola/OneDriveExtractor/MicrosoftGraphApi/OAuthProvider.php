@@ -176,7 +176,7 @@ class OAuthProvider
             ]);
         } catch(PHPException $e) { // TODO handle correct exceptions
             throw new GenerateAccessTokenFailure(
-                sprintf('Cannot generate access token by refresh token: "%s"', $e->getMessage())
+                sprintf('Cannot generate access token by refresh token: "%s" (%s)', $e->getMessage(), get_class($e))
             );
         }
 
