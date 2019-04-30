@@ -2,13 +2,12 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Keboola\OneDriveExtractor\Exception\UserException;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Keboola\Component\UserException;
 
 try {
     $component = new \Keboola\OneDriveExtractor\Component();
     $component->run();
-} catch(UserException | InvalidConfigurationException $e) {
+} catch(UserException $e) {
     error_log($e->getMessage());
 
     exit(1);

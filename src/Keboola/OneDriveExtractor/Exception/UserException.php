@@ -2,9 +2,7 @@
 
 namespace Keboola\OneDriveExtractor\Exception;
 
-use Exception;
-
-class UserException extends Exception
+class UserException extends \Keboola\Component\UserException
 {
 
 }
