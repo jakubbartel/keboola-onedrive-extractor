@@ -30,6 +30,7 @@ class OneDrive
      * @throws Exception\GenerateAccessTokenFailure
      * @throws Exception\InvalidSharingUrl
      * @throws Exception\MissingDownloadUrl
+     * @throws Exception\GatewayTimeout
      */
     public function readFileMetadataByLink(string $link) : FileMetadata
     {

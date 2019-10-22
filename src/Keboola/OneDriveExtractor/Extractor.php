@@ -108,6 +108,8 @@ class Extractor
             throw new Exception\UserException('Microsoft OAuth API token refresh failed, please reset authorization for the extractor configuration');
         } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded | MicrosoftGraphApi\Exception\InvalidSharingUrl $e) {
             throw new Exception\UserException($e->getMessage());
+        } catch(MicrosoftGraphApi\Exception\GatewayTimeout $e) {
+            throw new Exception\UserException('Microsoft API timeout, rerun to try again');
         } catch(MicrosoftGraphApi\Exception\AccessTokenNotInitialized $e) {
             throw new \Exception(sprintf("Access token not initialized: %s", $e->getMessage()));
         }

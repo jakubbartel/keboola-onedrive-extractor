@@ -46,6 +46,7 @@ class Shares
      * @throws Exception\GenerateAccessTokenFailure
      * @throws Exception\InvalidSharingUrl
      * @throws Exception\MissingDownloadUrl
+     * @throws Exception\GatewayTimeout
      */
     public function getSharesDriveItemMetadata(string $link)
     {
@@ -63,6 +64,12 @@ class Shares
             throw new Exception\InvalidSharingUrl(
                 sprintf('Given url "%s" cannot be loaded as OneDrive object', $link)
             );
+        } catch(GuzzleHttp\Exception\ServerException $e) {
+            if(strpos($e->getMessage(), '504 Gateway Timeout') !== false) {
+                throw new Exception\GatewayTimeout();
+            } else {
+                throw $e;
+            }
         }
 
         return FileMetadata::initByOneDriveModel($sharedDriveItem);
