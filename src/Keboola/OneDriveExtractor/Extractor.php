@@ -95,6 +95,7 @@ class Extractor
      * @return MicrosoftGraphApi\File
      * @throws Exception\UserException
      * @throws MicrosoftGraphApi\Exception\MissingDownloadUrl
+     * @throws \Exception
      */
     public function extractFile(string $link) : MicrosoftGraphApi\File
     {
@@ -103,8 +104,12 @@ class Extractor
         try {
             $fileMetadata = $files->readFileMetadataByLink($link);
             $file = $files->readFile($fileMetadata);
+        } catch(MicrosoftGraphApi\Exception\GenerateAccessTokenFailure $e) {
+            throw new Exception\UserException('Microsoft OAuth API token refresh failed, please reset authorization for the extractor configuration');
         } catch(MicrosoftGraphApi\Exception\FileCannotBeLoaded | MicrosoftGraphApi\Exception\InvalidSharingUrl $e) {
             throw new Exception\UserException($e->getMessage());
+        } catch(MicrosoftGraphApi\Exception\AccessTokenNotInitialized $e) {
+            throw new \Exception(sprintf("Access token not initialized: %s", $e->getMessage()));
         }
 
         $this->writeFileToOutput($file, $fileMetadata->getOneDriveName());

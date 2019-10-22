@@ -42,6 +42,8 @@ class Shares
     /**
      * @param string $link
      * @return FileMetadata
+     * @throws Exception\AccessTokenNotInitialized
+     * @throws Exception\GenerateAccessTokenFailure
      * @throws Exception\InvalidSharingUrl
      * @throws Exception\MissingDownloadUrl
      */

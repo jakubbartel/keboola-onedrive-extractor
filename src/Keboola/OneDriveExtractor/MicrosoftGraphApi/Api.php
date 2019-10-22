@@ -26,6 +26,8 @@ class Api
      * Get Microsoft Graph API with always refreshed access token.
      *
      * @return Graph
+     * @throws Exception\AccessTokenNotInitialized
+     * @throws Exception\GenerateAccessTokenFailure
      */
     public function getApi(): Graph
     {

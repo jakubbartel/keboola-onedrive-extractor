@@ -4,8 +4,6 @@ namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
 use Exception as PHPException;
 use InvalidArgumentException;
-use Keboola\OneDriveExtractor\MicrosoftGraphApi\Exception\GenerateAccessTokenFailure;
-use Keboola\OneDriveExtractor\MicrosoftGraphApi\Exception\InitAccessTokenFailure;
 use League\OAuth2;
 
 class OAuthProvider
@@ -120,7 +118,8 @@ class OAuthProvider
     /**
      * @param string $accessTokenData
      * @return OAuthProvider
-     * @throws InitAccessTokenFailure
+     * @throws Exception\InitAccessTokenFailure
+     * @throws Exception\AccessTokenInvalidData
      */
     public function initAccessToken(string $accessTokenData) : self
     {
@@ -129,7 +128,7 @@ class OAuthProvider
         try {
             $this->accessToken = new OAuth2\Client\Token\AccessToken($dataArr);
         } catch(InvalidArgumentException $e) {
-            throw new InitAccessTokenFailure(sprintf(
+            throw new Exception\InitAccessTokenFailure(sprintf(
                 'Cannot init access token by the provided data array: "%s"', $e->getMessage()
             ));
         }
@@ -162,7 +161,7 @@ class OAuthProvider
     /**
      * @return OAuthProvider
      * @throws Exception\AccessTokenNotInitialized
-     * @throws GenerateAccessTokenFailure
+     * @throws Exception\GenerateAccessTokenFailure
      */
     public function refreshAccessToken() : self
     {
@@ -175,7 +174,7 @@ class OAuthProvider
                 'refresh_token' => $this->accessToken->getRefreshToken(),
             ]);
         } catch(PHPException $e) { // TODO handle correct exceptions
-            throw new GenerateAccessTokenFailure(
+            throw new Exception\GenerateAccessTokenFailure(
                 sprintf('Cannot generate access token by refresh token: "%s" (%s)', $e->getMessage(), get_class($e))
             );
         }
@@ -186,7 +185,7 @@ class OAuthProvider
     /**
      * @return OAuth2\Client\Token\AccessTokenInterface
      * @throws Exception\AccessTokenNotInitialized
-     * @throws GenerateAccessTokenFailure
+     * @throws Exception\GenerateAccessTokenFailure
      */
     private function getRawAccessToken() : OAuth2\Client\Token\AccessTokenInterface
     {
@@ -201,6 +200,8 @@ class OAuthProvider
 
     /**
      * @return string
+     * @throws Exception\AccessTokenNotInitialized
+     * @throws Exception\GenerateAccessTokenFailure
      */
     public function getAccessToken() : string
     {
