@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Keboola\Component\UserException;
@@ -7,11 +9,11 @@ use Keboola\Component\UserException;
 try {
     $component = new \Keboola\OneDriveExtractor\Component();
     $component->run();
-} catch(UserException $e) {
+} catch (UserException $e) {
     error_log($e->getMessage());
 
     exit(1);
-} catch(Throwable $e) {
+} catch (Throwable $e) {
     error_log(get_class($e) . ': ' . $e->getMessage());
     error_log('File: ' . $e->getFile());
     error_log('Line: ' . $e->getLine());

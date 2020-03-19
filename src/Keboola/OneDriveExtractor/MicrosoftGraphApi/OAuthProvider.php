@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -78,18 +80,12 @@ class OAuthProvider
         ]);
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthorizationUrl() : string
+    public function getAuthorizationUrl(): string
     {
         return $this->provider->getAuthorizationUrl();
     }
 
-    /**
-     * @return string
-     */
-    public function getState() : string
+    public function getState(): string
     {
         return $this->provider->getState();
     }
@@ -99,15 +95,15 @@ class OAuthProvider
      * @return mixed[]
      * @throws Exception\AccessTokenInvalidData
      */
-    private function parseAccessTokenData(string $accessTokenData) : array
+    private function parseAccessTokenData(string $accessTokenData): array
     {
         $dataArr = json_decode($accessTokenData, true);
 
-        if($dataArr === null || ! is_array($dataArr)) {
+        if ($dataArr === null || ! is_array($dataArr)) {
             throw new Exception\AccessTokenInvalidData(
                 sprintf(
                     'Data json cannot be unmarshalled, sample: "%s"',
-                    is_string($accessTokenData) ? substr($accessTokenData, 0, 16) : gettype($accessTokenData)
+                    substr($accessTokenData, 0, 16)
                 )
             );
         }
@@ -121,15 +117,16 @@ class OAuthProvider
      * @throws Exception\InitAccessTokenFailure
      * @throws Exception\AccessTokenInvalidData
      */
-    public function initAccessToken(string $accessTokenData) : self
+    public function initAccessToken(string $accessTokenData): self
     {
         $dataArr = $this->parseAccessTokenData($accessTokenData);
 
         try {
             $this->accessToken = new OAuth2\Client\Token\AccessToken($dataArr);
-        } catch(InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new Exception\InitAccessTokenFailure(sprintf(
-                'Cannot init access token by the provided data array: "%s"', $e->getMessage()
+                'Cannot init access token by the provided data array: "%s"',
+                $e->getMessage()
             ));
         }
 
@@ -143,13 +140,13 @@ class OAuthProvider
      * @return OAuthProvider
      * @throws Exception\GenerateAccessTokenFailure
      */
-    public function generateAccessToken(string $code) : self
+    public function generateAccessToken(string $code): self
     {
         try {
             $this->accessToken = $this->provider->getAccessToken('authorization_code', [
                 'code' => $code,
             ]);
-        } catch(OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+        } catch (OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
             throw new Exception\GenerateAccessTokenFailure(
                 sprintf('Cannot generate access token: "%s"', $e->getMessage())
             );
@@ -163,9 +160,9 @@ class OAuthProvider
      * @throws Exception\AccessTokenNotInitialized
      * @throws Exception\GenerateAccessTokenFailure
      */
-    public function refreshAccessToken() : self
+    public function refreshAccessToken(): self
     {
-        if($this->accessToken === null) {
+        if ($this->accessToken === null) {
             throw new Exception\AccessTokenNotInitialized();
         }
 
@@ -173,7 +170,7 @@ class OAuthProvider
             $this->accessToken = $this->provider->getAccessToken('refresh_token', [
                 'refresh_token' => $this->accessToken->getRefreshToken(),
             ]);
-        } catch(PHPException $e) { // TODO handle correct exceptions
+        } catch (\Throwable $e) { // TODO handle correct exceptions
             throw new Exception\GenerateAccessTokenFailure(
                 sprintf('Cannot generate access token by refresh token: "%s" (%s)', $e->getMessage(), get_class($e))
             );
@@ -182,54 +179,34 @@ class OAuthProvider
         return $this;
     }
 
-    /**
-     * @return OAuth2\Client\Token\AccessTokenInterface
-     * @throws Exception\AccessTokenNotInitialized
-     * @throws Exception\GenerateAccessTokenFailure
-     */
-    private function getRawAccessToken() : OAuth2\Client\Token\AccessTokenInterface
+    private function getRawAccessToken(): OAuth2\Client\Token\AccessTokenInterface
     {
         // always refresh the access token, because "expires_in" is e.g. 3600 (secs) so expiration
         // is always +1 hour from now
-        if(true || $this->accessToken->hasExpired()) {
+        // if ($this->accessToken->hasExpired()) {
             $this->refreshAccessToken();
-        }
+        // }
 
         return $this->accessToken;
     }
 
-    /**
-     * @return string
-     * @throws Exception\AccessTokenNotInitialized
-     * @throws Exception\GenerateAccessTokenFailure
-     */
-    public function getAccessToken() : string
+    public function getAccessToken(): string
     {
         return $this->getRawAccessToken()->getToken();
     }
 
-    /**
-     * @return string
-     */
-    public function getAccessTokenData() : string
+    public function getAccessTokenData(): string
     {
-        return json_encode($this->getRawAccessToken());
+        return (string) json_encode($this->getRawAccessToken());
     }
 
-    /**
-     * @return string
-     */
-    public function getRefreshToken() : ?string
+    public function getRefreshToken(): ?string
     {
         return $this->accessToken->getRefreshToken();
     }
 
-    /**
-     * @return string
-     */
-    public function getJWTToken() : string
+    public function getJWTToken(): string
     {
         return $this->getRawAccessToken()->getValues()['id_token'];
     }
-
 }

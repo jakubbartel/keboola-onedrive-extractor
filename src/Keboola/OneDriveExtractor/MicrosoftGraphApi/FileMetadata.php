@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -30,7 +32,7 @@ class FileMetadata
      * @param string $oneDriveName
      * @param string $downloadUrl
      */
-    private function __construct($oneDriveId, $oneDriveName, $downloadUrl)
+    private function __construct(string $oneDriveId, string $oneDriveName, string $downloadUrl)
     {
         $this->oneDriveId = $oneDriveId;
         $this->oneDriveName = $oneDriveName;
@@ -46,7 +48,7 @@ class FileMetadata
     {
         $properties = $oneDriveItem->getProperties();
 
-        if( ! isset($properties['@microsoft.graph.downloadUrl'])) {
+        if (! isset($properties['@microsoft.graph.downloadUrl'])) {
             throw new MissingDownloadUrl();
         }
 
@@ -57,28 +59,18 @@ class FileMetadata
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getOneDriveId() : string
+    public function getOneDriveId(): string
     {
         return $this->oneDriveId;
     }
 
-    /**
-     * @return string
-     */
-    public function getOneDriveName() : string
+    public function getOneDriveName(): string
     {
         return $this->oneDriveName;
     }
 
-    /**
-     * @return string
-     */
-    public function getDownloadUrl() : string
+    public function getDownloadUrl(): string
     {
         return $this->downloadUrl;
     }
-
 }

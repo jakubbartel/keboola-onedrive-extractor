@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -39,16 +41,7 @@ class Shares
         return $sharingUrl;
     }
 
-    /**
-     * @param string $link
-     * @return FileMetadata
-     * @throws Exception\AccessTokenNotInitialized
-     * @throws Exception\GenerateAccessTokenFailure
-     * @throws Exception\InvalidSharingUrl
-     * @throws Exception\MissingDownloadUrl
-     * @throws Exception\GatewayTimeout
-     */
-    public function getSharesDriveItemMetadata(string $link)
+    public function getSharesDriveItemMetadata(string $link): FileMetadata
     {
         $sharingUrl = $this->generateSharingUrl($link);
 
@@ -60,12 +53,12 @@ class Shares
                 ->createRequest('GET', sprintf('/shares/%s/driveItem', $sharingUrl)) // get drive item directly
                 ->setReturnType(Model\DriveItem::class)
                 ->execute();
-        } catch(GraphException | GuzzleHttp\Exception\ClientException $e) {
+        } catch (GraphException | GuzzleHttp\Exception\ClientException $e) {
             throw new Exception\InvalidSharingUrl(
                 sprintf('Given url "%s" cannot be loaded as OneDrive object', $link)
             );
-        } catch(GuzzleHttp\Exception\ServerException $e) {
-            if(strpos($e->getMessage(), '504 Gateway Timeout') !== false) {
+        } catch (GuzzleHttp\Exception\ServerException $e) {
+            if (strpos($e->getMessage(), '504 Gateway Timeout') !== false) {
                 throw new Exception\GatewayTimeout();
             } else {
                 throw $e;
@@ -74,5 +67,4 @@ class Shares
 
         return FileMetadata::initByOneDriveModel($sharedDriveItem);
     }
-
 }

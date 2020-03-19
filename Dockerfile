@@ -1,24 +1,48 @@
-FROM php:7.1-cli
 
-RUN apt-get update && apt-get install -y \
+FROM php:7.4-cli
+
+ARG COMPOSER_FLAGS="--prefer-dist --no-interaction"
+ARG DEBIAN_FRONTEND=noninteractive
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_PROCESS_TIMEOUT 3600
+
+WORKDIR /code/
+
+COPY docker/php-prod.ini /usr/local/etc/php/php.ini
+COPY docker/composer-install.sh /tmp/composer-install.sh
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
+        locales \
         unzip \
         curl \
         libicu-dev \
-        --no-install-recommends && \
-    docker-php-ext-install \
-        sockets \
-        mbstring \
-        intl && \
-    apt-get clean
+        libonig-dev \
+	&& rm -r /var/lib/apt/lists/* \
+	&& sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+	&& locale-gen \
+	&& chmod +x /tmp/composer-install.sh \
+	&& /tmp/composer-install.sh \
+	&& docker-php-ext-install sockets mbstring intl \
+	&& apt-get clean
 
-COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY docker/php-prod.ini /usr/local/etc/php/php.ini
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
-COPY . /app
-WORKDIR /app
-RUN composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+## Composer - deps always cached unless changed
+# First copy only composer files
+COPY composer.* /code/
 
-CMD ["php", "run.php"]
+# Download dependencies, but don't run scripts or init autoloaders as the app is missing
+RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
+
+# Copy rest of the app
+COPY . /code/
+
+# Run normal composer - all deps are cached already
+RUN composer install $COMPOSER_FLAGS
+
+CMD ["php", "/code/src/run.php"]

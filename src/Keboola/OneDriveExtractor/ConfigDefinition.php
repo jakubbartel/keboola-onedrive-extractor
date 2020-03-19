@@ -1,18 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Keboola\OneDriveExtractor;
 
 use Keboola\Component\Config\BaseConfigDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 class ConfigDefinition extends BaseConfigDefinition
 {
-
-    /**
-     * @return ArrayNodeDefinition|NodeDefinition
-     */
-    protected function getParametersDefinition()
+    protected function getParametersDefinition(): ArrayNodeDefinition
     {
         $parametersNode = parent::getParametersDefinition();
 
@@ -27,5 +24,4 @@ class ConfigDefinition extends BaseConfigDefinition
 
         return $parametersNode;
     }
-
 }

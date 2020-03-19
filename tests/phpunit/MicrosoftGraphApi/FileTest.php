@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Keboola\OneDriveExtractor\Tests\MicrosoftGraphApi;
 
 use GuzzleHttp;
@@ -9,11 +11,12 @@ use PHPUnit\Framework\TestCase;
 class FileTest extends TestCase
 {
 
-    public function testSaveFileAndContent() : void
+    public function testSaveFileAndContent(): void
     {
         $string = 'Bad-ass string';
 
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
+        assert($stream !== false);
         fwrite($stream, $string);
         rewind($stream);
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -17,13 +19,12 @@ class File
     /**
      * File constructor can be called only by init* methods.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
-    /**
-     * @param StreamInterface $stream
-     * @return File
-     */
-    public static function initByStream(StreamInterface $stream) : File {
+    public static function initByStream(StreamInterface $stream): File
+    {
         $file = new File();
 
         $file->stream = $stream;
@@ -31,12 +32,9 @@ class File
         return $file;
     }
 
-    /**
-     * @return string
-     */
-    public function getContents() : string
+    public function getContents(): string
     {
-        if($this->stream->isSeekable()) {
+        if ($this->stream->isSeekable()) {
             $this->stream->rewind();
         }
 
@@ -48,7 +46,7 @@ class File
      * @param string $filePathname
      * @return File
      */
-    public function saveToFile(Filesystem $fileSystem, string $filePathname) : self
+    public function saveToFile(Filesystem $fileSystem, string $filePathname): self
     {
         // stream version is preferred but not functional
         //$resource = StreamWrapper::getResource($this->stream);
@@ -58,5 +56,4 @@ class File
 
         return $this;
     }
-
 }

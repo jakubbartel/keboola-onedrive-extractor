@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -23,40 +25,27 @@ class OneDrive
         $this->api = $api;
     }
 
-    /**
-     * @param string $link
-     * @return FileMetadata
-     * @throws Exception\AccessTokenNotInitialized
-     * @throws Exception\GenerateAccessTokenFailure
-     * @throws Exception\InvalidSharingUrl
-     * @throws Exception\MissingDownloadUrl
-     * @throws Exception\GatewayTimeout
-     */
-    public function readFileMetadataByLink(string $link) : FileMetadata
+    public function readFileMetadataByLink(string $link): FileMetadata
     {
         $shares = new Shares($this->api);
 
         return $shares->getSharesDriveItemMetadata($link);
     }
 
-    /**
-     * @param FileMetadata $oneDriveItemMetadata
-     * @return File
-     * @throws Exception\FileCannotBeLoaded
-     */
-    public function readFile(FileMetadata $oneDriveItemMetadata) : File
+    public function readFile(FileMetadata $oneDriveItemMetadata): File
     {
         $client = new Client();
 
         try {
             $response = $client->get($oneDriveItemMetadata->getDownloadUrl());
-        } catch(RequestException $e) {
+        } catch (RequestException $e) {
             $response = $e->getResponse();
 
-            if($response !== null) {
+            if ($response !== null) {
                 throw new Exception\FileCannotBeLoaded(
                     sprintf(
-                        'File with id "%s" cannot not be downloaded from OneDrive, returned status code %d on download url',
+                        'File with id "%s" cannot not be downloaded from OneDrive, ' .
+                        'returned status code %d on download url',
                         $oneDriveItemMetadata->getOneDriveId(),
                         $response->getStatusCode()
                     )
@@ -64,7 +53,8 @@ class OneDrive
             } else {
                 throw new Exception\FileCannotBeLoaded(
                     sprintf(
-                        'File with id "%s" cannot not be downloaded from OneDrive, error when performing GET request %s',
+                        'File with id "%s" cannot not be downloaded from OneDrive, ' .
+                        'error when performing GET request %s',
                         $oneDriveItemMetadata->getOneDriveId(),
                         $e->getMessage()
                     )
@@ -72,10 +62,11 @@ class OneDrive
             }
         }
 
-        if($response->getStatusCode() !== 200) {
+        if ($response->getStatusCode() !== 200) {
             throw new Exception\FileCannotBeLoaded(
                 sprintf(
-                    'File with id "%s" cannot not be downloaded from OneDrive, returned status code %d on download url',
+                    'File with id "%s" cannot not be downloaded from OneDrive, ' .
+                    'returned status code %d on download url',
                     $oneDriveItemMetadata->getOneDriveId(),
                     $response->getStatusCode()
                 )
@@ -84,5 +75,4 @@ class OneDrive
 
         return File::initByStream($response->getBody());
     }
-
 }

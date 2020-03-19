@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Keboola\OneDriveExtractor\Tests\Config;
 
 use Keboola\Component;
@@ -10,10 +12,10 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 class ConfigDefinitionTest extends TestCase
 {
 
-    public function testLoadValidConfig() : void
+    public function testLoadValidConfig(): void
     {
         $config = new Component\Config\BaseConfig(
-            json_decode(file_get_contents(__DIR__ . '/fixtures/config_valid.json'), true),
+            json_decode((string) file_get_contents(__DIR__ . '/fixtures/config_valid.json'), true),
             new OneDriveExtractor\ConfigDefinition()
         );
 
@@ -22,12 +24,12 @@ class ConfigDefinitionTest extends TestCase
         $this->assertEquals('_id_', $config->getValue(['parameters', 'id']));
     }
 
-    public function testLoadConfigWithMissingId() : void
+    public function testLoadConfigWithMissingId(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
         new Component\Config\BaseConfig(
-            json_decode(file_get_contents(__DIR__ . '/fixtures/config_missing_id.json'), true),
+            json_decode((string) file_get_contents(__DIR__ . '/fixtures/config_missing_id.json'), true),
             new OneDriveExtractor\ConfigDefinition()
         );
     }

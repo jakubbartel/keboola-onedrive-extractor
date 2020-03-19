@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Keboola\OneDriveExtractor\MicrosoftGraphApi;
 
@@ -35,5 +37,4 @@ class Api
 
         return $api->setAccessToken($this->provider->getAccessToken());
     }
-
 }
